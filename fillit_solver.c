@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   fillit_solver.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: kkamphor <kkamphor@student.codam.nl>         +#+                     */
+/*   By: tide-jon <tide-jon@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/19 13:35:49 by tide-jon       #+#    #+#                */
-/*   Updated: 2019/04/22 15:41:30 by kkamphor      ########   odam.nl         */
+/*   Updated: 2019/04/22 16:34:43 by tide-jon      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** deze functie kan in c library
 */
 
-static	int		count_pointers(void **arr)
+static int	count_pointers(void **arr)
 {
 	int i;
 
@@ -28,10 +28,11 @@ static	int		count_pointers(void **arr)
 }
 
 /*
-** bepaalt de starting size van het kleinste vierkant waar tetriminos in kunnen passen
+** bepaalt de starting size van het kleinste vierkant waar
+** tetriminos in kunnen passen
 */
 
-static int		square_startsize(int n)
+static int	square_startsize(int n)
 {
 	int size;
 
@@ -41,7 +42,7 @@ static int		square_startsize(int n)
 	return (size);
 }
 
-static void		print_solution(char **sqr, int square_size)
+static void	print_solution(char **sqr, int square_size)
 {
 	int	i;
 
@@ -54,11 +55,58 @@ static void		print_solution(char **sqr, int square_size)
 	}
 }
 
+static int	tetri_filler(char **sqr, t_tetrimino **arr, int y_sqr, int x_sqr)
+{
+	int	part;
+
+	part = 0;
+	while (part < 4)
+	{
+		sqr[y_sqr + (**arr).y_coord[part]][x_sqr + (**arr).x_coord[part]] =
+																(**arr).sign;
+		part++;
+	}
+	if (solver(sqr, arr + 1, ft_strlen(sqr[0])) == 1)
+		return (1);
+	else
+	{
+		while (part > 0)
+		{
+			sqr[y_sqr + (**arr).y_coord[part - 1]][x_sqr +
+						(**arr).x_coord[part - 1]] = '.';
+			part++;
+		}
+		return (0);
+	}
+}
+
+static int	tetri_fit_check(char **sqr, t_tetrimino **arr, int y_sqr, int x_sqr)
+{
+	int	part;
+
+	part = 0;
+	while (part < 4)
+	{
+		if (sqr[y_sqr + (**arr).y_coord[part]][x_sqr +
+						(**arr).x_coord[part]] == '.')
+			part++;
+		else
+			break ;
+	}
+	if (part == 4)
+	{
+		if (tetri_filler(sqr, arr, y_sqr, x_sqr) == 1)
+			return (1);
+	}
+	return (0);
+}
+
 /*
-** dit is de solver die met recursive backtracking de puzzel bruteforced en de functie aanroept die het antwoord uitprint.
+** dit is de solver die met recursive backtracking de puzzel bruteforced
+** en de functie aanroept die het antwoord uitprint.
 */
 
-static int				solver(char **sqr, t_tetrimino **arr, int square_size)
+static int	solver(char **sqr, t_tetrimino **arr, int square_size)
 {
 	int x_sqr;
 	int y_sqr;
@@ -72,32 +120,7 @@ static int				solver(char **sqr, t_tetrimino **arr, int square_size)
 			x_sqr = 0;
 			while (x_sqr < square_size)
 			{
-				part = 0;																			// {function
-				while (part < 4)
-				{
-					if (sqr[y_sqr + (**arr).y_coord[part]][x_sqr + (**arr).x_coord[part]] == '.')
-						part++;
-					else
-						break ;
-				}
-				if (part == 4)																		// (2e functie in functie){
-				{
-					while (part > 0)
-					{
-						sqr[y_sqr + (**arr).y_coord[part - 1]][x_sqr + (**arr).x_coord[part - 1]] = (**arr).sign;
-						part--;
-					}
-					if (solver(sqr, arr + 1, square_size) == 1)
-						return (1);
-					else
-					{
-						while (part < 4)
-						{
-							sqr[y_sqr + (**arr).y_coord[part]][x_sqr + (**arr).x_coord[part]] = '.';
-							part++;
-						}
-					}																				// }}
-				}
+				tetri_fit_check(sqr, arr, y_sqr, x_sqr);
 				x_sqr++;
 			}
 			y_sqr++;
@@ -107,31 +130,6 @@ static int				solver(char **sqr, t_tetrimino **arr, int square_size)
 	print_solution(sqr, square_size);
 	return (1);
 }
-
-/*
-** vult het vierkant met '.' en eindigt strings met '\0' en eindigt het array sqr met een NULL;
-*/
-
-/*static void			fillsqr(char **sqr, int square_size)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	while (j < square_size)
-	{
-		while (i < square_size)
-		{
-			sqr[j][i] = '.';
-			i++;
-		}
-		sqr[j][i] = '\0';
-		i = 0;
-		j++;
-	}
-	sqr[j] = NULL;
-}*/
 
 static void	free_square(char **square)
 {
@@ -172,10 +170,11 @@ static char	**make_square(size_t size)
 }
 
 /*
-** roept de solver aan voor grotere squares als er geen oplossing is voor een kleinere square
+** roept de solver aan voor grotere squares als er
+** geen oplossing is voor een kleinere square
 */
 
-void			pre_solver(t_tetrimino **arr)
+void		pre_solver(t_tetrimino **arr)
 {
 	int		i;
 	size_t	square_size;
