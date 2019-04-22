@@ -6,43 +6,53 @@
 /*   By: kkamphor <kkamphor@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/18 15:47:00 by kkamphor       #+#    #+#                */
-/*   Updated: 2019/04/18 19:29:59 by kkamphor      ########   odam.nl         */
+/*   Updated: 2019/04/22 16:31:48 by kkamphor      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
+/*
+** takes a tetrimino that has been filled out, assigns a alphabetical character
+** to said tetrimino corresponding to its position within the list, and "moves"
+** the coordinates to the lowest possible values.
+*/
+
 static void	finish_tetrimino(t_tetrimino *tetri, int count)
 {
 	int		i;
-	int		lowX;
-	int		lowY;
+	int		lowx;
+	int		lowy;
 
 	tetri->sign = 'A' + count;
 	i = 0;
-	lowX = 4;
-	lowY = 4;
+	lowx = 4;
+	lowy = 4;
 	while (i < 4)
 	{
-		if (lowX > tetri->x_coord[i])
-			lowX = tetri->x_coord[i];
-		if (lowY > tetri->y_coord[i])
-			lowY = tetri->y_coord[i];
+		if (lowx > tetri->x_coord[i])
+			lowx = tetri->x_coord[i];
+		if (lowy > tetri->y_coord[i])
+			lowy = tetri->y_coord[i];
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		tetri->x_coord[i] = tetri->x_coord[i] - lowX;
-		tetri->y_coord[i] = tetri->y_coord[i] - lowY;
+		tetri->x_coord[i] = tetri->x_coord[i] - lowx;
+		tetri->y_coord[i] = tetri->y_coord[i] - lowy;
 		i++;
 	}
 }
 
+/*
+** Fills in the coordinates of a '#' character of a given tetrimino
+*/
+
 static void	fill_block(int i, int y, t_tetrimino *tetri, int count)
 {
 	static int	hash;
-	
+
 	tetri->x_coord[hash] = (i - count) % 5;
 	tetri->y_coord[hash] = y;
 	hash++;
@@ -50,7 +60,12 @@ static void	fill_block(int i, int y, t_tetrimino *tetri, int count)
 		hash = 0;
 }
 
-t_tetrimino	**create_tetrilist(char* buff)
+/*
+** Creates a list of tetriminos out of the character buffer read from the
+** input file.
+*/
+
+t_tetrimino	**create_tetrilist(char *buff)
 {
 	t_tetrimino	**tetrilist;
 	int			y;
