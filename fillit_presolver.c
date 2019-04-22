@@ -6,7 +6,7 @@
 /*   By: kkamphor <kkamphor@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/22 15:53:47 by kkamphor       #+#    #+#                */
-/*   Updated: 2019/04/22 17:09:23 by kkamphor      ########   odam.nl         */
+/*   Updated: 2019/04/22 18:00:18 by kkamphor      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,15 @@ static int		square_startsize(int n)
 
 static void		free_square(char **square)
 {
-	if (square[1] != NULL)
-		free_square(&square[1]);
-	ft_strdel(square);
+	int	i;
+
+	i = 0;
+	while (square[i])
+	{
+		free(square[i]);
+		i++;
+	}
+	free(square);
 	square = NULL;
 }
 

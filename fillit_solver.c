@@ -6,7 +6,7 @@
 /*   By: kkamphor <kkamphor@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/19 13:35:49 by tide-jon       #+#    #+#                */
-/*   Updated: 2019/04/22 16:59:26 by kkamphor      ########   odam.nl         */
+/*   Updated: 2019/04/22 18:02:38 by kkamphor      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	tetri_filler(char **sqr, t_tetrimino **arr, int y_sqr, int x_sqr)
 			part--;
 		}
 		return (0);
-	}	
+	}
 }
 
 static int	tetri_fit_check(char **sqr, t_tetrimino **arr, int y_sqr, int x_sqr)

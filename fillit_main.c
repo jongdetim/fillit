@@ -6,7 +6,7 @@
 /*   By: kkamphor <kkamphor@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/04/12 16:35:17 by tide-jon       #+#    #+#                */
-/*   Updated: 2019/04/22 17:00:59 by kkamphor      ########   odam.nl         */
+/*   Updated: 2019/04/22 18:04:03 by kkamphor      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,5 @@ int			main(int argc, char **argv)
 	}
 	else
 		ft_putendl("usage: ./fillit target_file");
-	while (1)
-		;
 	return (0);
 }
